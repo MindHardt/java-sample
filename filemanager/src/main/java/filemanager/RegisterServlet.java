@@ -51,6 +51,7 @@ public class RegisterServlet extends HttpServlet {
             if (!JDBCConnection.containsUser(user)) {
                 JDBCConnection.addUser(user);
                 resp.sendRedirect("/login");
+                logger.info("registered user " + user);
                 logger.info("redirect to /");
             }
         } catch (SQLException e) {

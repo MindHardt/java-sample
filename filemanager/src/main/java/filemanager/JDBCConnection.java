@@ -5,11 +5,11 @@ import java.util.logging.Logger;
 
 public class JDBCConnection {
 
-    private static String url = "jdbc:mysql://localhost:3306/users";
-    private static String username = "root";
-    private static String password = "root";
+    private static final String url = "jdbc:mysql://localhost:3306/users";
+    private static final String username = "root";
+    private static final String password = "root";
     private static Connection connection = null;
-    private static Logger logger = Logger.getLogger("");
+    private static final Logger logger = Logger.getLogger("");
 
     public static void connect(){
         logger.info("Connecting...");
@@ -49,8 +49,8 @@ public class JDBCConnection {
         connect();
         int result = 0;
         try {
-            result = executeQuery("SELECT COUNT(*) FROM user \n WHERE user.login = \'"
-                    + user.getLogin() + "\'").getInt("1");
+            result = executeQuery("SELECT COUNT(*) FROM user \n WHERE user.login = '"
+                    + user.getLogin() + '\'').getInt("1");
 
             logger.info("Check contains success");
             disconnect();
@@ -65,13 +65,13 @@ public class JDBCConnection {
     public static void addUser(User user) throws SQLException {
         connect();
         try{
-            executeUpdate("INSERT INTO user VALUES (\'" + user.getLogin() + "\', \'"
-                        + user.getEmail() + "\', \'" + user.getPassword() + "\')");
+            executeUpdate("INSERT INTO user VALUES ('" + user.getLogin() + "', '"
+                        + user.getEmail() + "', '" + user.getPassword() + "')");
 
-            logger.info("Add user success");
+            logger.info("Adding user: success");
             disconnect();
         }catch (SQLException e){
-            logger.info("Add user failed");
+            logger.info("Adding user: failed");
             disconnect();
         }
     }
@@ -80,14 +80,14 @@ public class JDBCConnection {
         connect();
         ResultSet result = null;
         try{
-            result = executeQuery("SELECT * FROM user WHERE user.login =\'" + login + "\'");
+            result = executeQuery("SELECT * FROM user WHERE user.login ='" + login + "'");
             logger.info("Select login");
         } catch (SQLException e){
             logger.info("Select login failed");
             e.printStackTrace();
         }
-        if (!result.next()) {
-            logger.info("no user with such a login");
+        if (result == null) {
+            logger.info("no user with specified login");
             return null;
         }
         logger.info(result.toString());
@@ -101,7 +101,7 @@ public class JDBCConnection {
             return false;
 
         logger.info(user.toString());
-        return user.getPassword() == loginPassword;
+        return user.getPassword().equals(loginPassword);
     }
 
     private static void disconnect(){
