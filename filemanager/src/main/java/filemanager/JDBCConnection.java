@@ -24,10 +24,10 @@ public class JDBCConnection {
     }
 
     private static ResultSet executeQuery(String query) throws SQLException {
-        Statement statement = connection.createStatement();
+        PreparedStatement statement = connection.prepareStatement(query);
         ResultSet result = null;
         try{
-            result = statement.executeQuery(query);
+            result = statement.executeQuery();
         } catch (SQLException e){
             logger.info("Query execution failed!");
             e.printStackTrace();
@@ -36,9 +36,9 @@ public class JDBCConnection {
     }
 
     private static void executeUpdate(String query) throws SQLException {
-        Statement statement = connection.createStatement();
+        PreparedStatement statement = connection.prepareStatement(query);
         try{
-            statement.executeUpdate(query);
+            statement.executeUpdate();
         } catch (SQLException e){
             logger.info("Adding a user failed!");
             e.printStackTrace();
