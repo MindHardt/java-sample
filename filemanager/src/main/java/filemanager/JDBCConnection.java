@@ -86,8 +86,8 @@ public class JDBCConnection {
             logger.info("Select login failed");
             e.printStackTrace();
         }
-        if (result == null) {
-            logger.info("no user with specified login");
+        if (!result.next()) {
+            logger.info("no user with such a login");
             return null;
         }
         logger.info(result.toString());
